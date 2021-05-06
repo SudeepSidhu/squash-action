@@ -1,0 +1,7 @@
+name: 'Squash Action'
+description: 'An actiont to rebase and squash all commits'
+runs:
+  using: "composite"
+  steps:
+    - run: ${{ github.action_path }}/squash.sh
+      shell: bash
