@@ -48,6 +48,8 @@ echo "Base branch for PR #$PR_NUMBER is $BASE_BRANCH"
 
 set -o xtrace
 
+git remote set-url origin https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+
 git checkout $BASE_BRANCH && git pull
 git checkout $HEAD_BRANCH && git pull
 
