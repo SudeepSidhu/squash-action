@@ -12,14 +12,14 @@ if [[ "$PR_NUMBER" == "null" ]]; then
 fi
 echo "Collecting information about PR #$PR_NUMBER of $GITHUB_REPOSITORY..."
 
-if [[ -z "$GITHUB_TOKEN" ]]; then
-	echo "Set the GITHUB_TOKEN env variable."
+if [[ -z "$COMMITTER_TOKEN" ]]; then
+	echo "Set the COMMITTER_TOKEN env variable."
 	exit 1
 fi
 
 URI=https://api.github.com
 API_HEADER="Accept: application/vnd.github.v3+json"
-AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
+AUTH_HEADER="Authorization: token $COMMITTER_TOKEN"
 
 pr_resp=$(curl -X GET -s -H "${AUTH_HEADER}" -H "${API_HEADER}" \
           "${URI}/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER")
@@ -48,7 +48,7 @@ echo "Base branch for PR #$PR_NUMBER is $BASE_BRANCH"
 
 set -o xtrace
 
-git remote set-url origin https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+git remote set-url origin https://x-access-token:$COMMITTER_TOKEN@github.com/$GITHUB_REPOSITORY.git
 
 git checkout $BASE_BRANCH && git pull
 git checkout $HEAD_BRANCH && git pull
@@ -59,4 +59,4 @@ git reset --soft $(git rev-parse $BASE_BRANCH)
 git add .
 git commit -m "${COMMIT_NAME}"
 
-git push -f
+git push --force-with-lease
